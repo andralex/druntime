@@ -4351,6 +4351,10 @@ $(LI Dependencies at the top of a module are easier to inspect quickly than
 dependencies spread throughout the module.)
 )
 
+See_Also: The $(HTTP forum.dlang.org/post/tzqzmqhankrkbrfsrmbo@forum.dlang.org,
+forum discussion) that led to the creation of the `from` facility. Credit is due
+to Daniel Nielsen and Dominikus Dittes Scherkl.
+
 */
 template from(string moduleName)
 {
