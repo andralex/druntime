@@ -4291,7 +4291,7 @@ Provides an "inline import", i.e. an `import` that is only available for a
 limited lookup. For example:
 
 ---
-void fun(from!"std.stdio".File input)
+void fun(Import!"std.stdio".File input)
 {
     ... use File from std.stdio normally ...
 }
@@ -4301,8 +4301,8 @@ There is no need to import `std.stdio` at top level, so `fun` carries its own
 dependencies. The same approach can be used for template constraints:
 
 ---
-void fun(T)(from!"std.stdio".File input, T value)
-if (from!"std.traits".isIntegral!T)
+void fun(T)(Import!"std.stdio".File input, T value)
+if (Import!"std.traits".isIntegral!T)
 {
     ...
 }
@@ -4315,8 +4315,8 @@ made available:
 ---
 void fun()
 {
-    with (from!"std.datetime")
-    with (from!"std.stdio")
+    with (Import!"std.datetime")
+    with (Import!"std.stdio")
     {
         Clock.currTime.writeln;
     }
@@ -4327,19 +4327,19 @@ The advantages of inline imports over top-level uses of the `import` declaration
 are the following:
 
 $(UL
-$(LI The `from` template specifies dependencies at declaration level, not at
+$(LI The `Import` template specifies dependencies at declaration level, not at
 module level. This allows reasoning about the dependency cost of declarations in
 separation instead of aggregated at module level.)
-$(LI Declarations using `from` are easier to move around because they don't
+$(LI Declarations using `Import` are easier to move around because they don't
 require top-level context, making for simpler and quicker refactorings.)
-$(LI Declarations using `from` scale better with templates. This is because
+$(LI Declarations using `Import` scale better with templates. This is because
 templates that are not instantiated do not have their parameters and constraints
 instantiated, so additional modules are not imported without necessity. This
 makes the cost of unused templates negligible. Dependencies are pulled on a need
 basis depending on the declarations used by client code.)
 )
 
-The use of `from` also has drawbacks:
+The use of `Import` also has drawbacks:
 
 $(UL
 $(LI If most declarations in a module need the same imports, then factoring them
@@ -4356,7 +4356,7 @@ forum discussion) that led to the creation of the `from` facility. Credit is due
 to Daniel Nielsen and Dominikus Dittes Scherkl.
 
 */
-template from(string moduleName)
+template Import(string moduleName)
 {
-    mixin("import from = " ~ moduleName ~ ";");
+    mixin("import Import = " ~ moduleName ~ ";");
 }
